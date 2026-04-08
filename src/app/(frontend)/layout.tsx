@@ -51,9 +51,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
 export const metadata: Metadata = {
   metadataBase: new URL(getServerSideURL()),
+  title: 'Hutton Service',
+  description: 'Hutton Service helps manage appointments, bookings, and client email communication.',
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
+    title: 'Hutton Service',
+    description: 'Hutton Service helps manage appointments, bookings, and client email communication.',
   },
 }

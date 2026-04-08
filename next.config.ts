@@ -12,12 +12,12 @@ const NEXT_PUBLIC_SERVER_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL
   : process.env.__NEXT_PRIVATE_ORIGIN || 'http://localhost:3000'
 
 const nextConfig: NextConfig = {
-  basePath: '/template',
+  basePath: '/templatehos',
   allowedDevOrigins: ['34.124.244.233'],
   images: {
     localPatterns: [
       {
-        pathname: '/template/api/media/file/**',
+        pathname: '/templatehos/api/media/file/**',
       },
     ],
     qualities: [100],

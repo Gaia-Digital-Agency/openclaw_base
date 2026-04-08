@@ -1,7 +1,7 @@
 {
   "name": "gaiada-web-revamp",
   "version": "1.0.0",
-  "description": "Website template for Payload",
+  "description": "Hutton Service website and booking portal",
   "license": "MIT",
   "type": "module",
   "scripts": {

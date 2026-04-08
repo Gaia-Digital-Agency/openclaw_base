@@ -61,11 +61,23 @@ const BeforeLogin: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ display: 'grid', gap: '12px' }}>
       <p>
         <b>Welcome to your dashboard!</b>
         {' This is where site admins will log in to manage your website.'}
       </p>
+      <div
+        style={{
+          border: '1px solid var(--theme-elevation-150)',
+          borderRadius: '10px',
+          padding: '12px 14px',
+          background: 'var(--theme-elevation-50)',
+        }}
+      >
+        <p style={{ margin: 0, fontWeight: 700 }}>Login helper</p>
+        <p style={{ margin: '8px 0 0' }}>Email: demo-author@example.com</p>
+        <p style={{ margin: '4px 0 0' }}>Password: password</p>
+      </div>
     </div>
   )
 }
