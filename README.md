@@ -91,6 +91,9 @@ Current V1 endpoints:
 - `GET /api/serena/auth/verify`
 - `GET /api/serena/status`
 - `POST /api/serena/pages/upsert`
+- `POST /api/serena/posts/upsert`
+- `POST /api/serena/globals/update`
+- `POST /api/serena/media/upload`
 - `POST /api/serena/revalidate`
 
 See `docs/serena-api.md` for the contract and expected environment variables.

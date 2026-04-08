@@ -109,13 +109,70 @@ Request examples:
 { "tag": "pages-sitemap" }
 ```
 
+### `POST /api/serena/posts/upsert`
+
+Creates or updates a Payload `posts` document by `id` or `slug`.
+
+Request:
+
+```json
+{
+  "title": "Yesterday blog draft",
+  "slug": "yesterday-blog-draft",
+  "status": "draft",
+  "meta": {
+    "title": "Yesterday blog draft",
+    "description": "Draft blog post created by Serena"
+  }
+}
+```
+
+If `content` is omitted, the API creates a minimal valid rich-text body automatically.
+
+### `POST /api/serena/globals/update`
+
+Updates a supported Payload global.
+
+Currently supported globals:
+
+- `header`
+- `footer`
+- `settings`
+
+Request:
+
+```json
+{
+  "global": "settings",
+  "data": {
+    "contactEmail": "hello@example.com"
+  }
+}
+```
+
+### `POST /api/serena/media/upload`
+
+Uploads an asset into the `media` collection using multipart form data.
+
+Form fields:
+
+- `file` - required
+- `alt` - optional
+- `folder` - optional
+
+Example:
+
+```bash
+curl -X POST "$BASE_URL/api/serena/media/upload" \
+  -H "Authorization: Bearer $SERENA_API_SECRET" \
+  -F "file=@./hero.jpg" \
+  -F "alt=Homepage hero"
+```
+
 ## Intended Evolution
 
 The next reusable endpoints for other Serena-managed sites should likely be:
 
-- `/api/serena/posts/upsert`
-- `/api/serena/globals/update`
-- `/api/serena/media/upload`
 - `/api/serena/publish`
 - `/api/serena/content/search`
 

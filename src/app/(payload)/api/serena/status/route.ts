@@ -41,6 +41,9 @@ export async function GET(request: NextRequest) {
     },
     features: {
       pageUpsert: true,
+      postUpsert: true,
+      globalUpdate: true,
+      mediaUpload: true,
       revalidate: true,
     },
   })

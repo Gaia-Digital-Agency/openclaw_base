@@ -4,7 +4,15 @@ import type { NextRequest } from 'next/server'
 
 import { toKebabCase } from '@/utilities/toKebabCase'
 
-const defaultScopes = ['auth:verify', 'status:read', 'pages:write', 'revalidate:write'] as const
+const defaultScopes = [
+  'auth:verify',
+  'status:read',
+  'pages:write',
+  'posts:write',
+  'globals:write',
+  'media:write',
+  'revalidate:write',
+] as const
 
 type SerenaAuthSuccess = {
   ok: true
@@ -26,6 +34,20 @@ export type SerenaPageUpsertInput = {
   slug?: string
   hero?: Record<string, unknown>
   layout?: unknown[]
+  meta?: Record<string, unknown>
+  status?: 'draft' | 'published'
+  publishedAt?: string | null
+}
+
+export type SerenaPostUpsertInput = {
+  id?: number | string
+  title?: string
+  slug?: string
+  content?: Record<string, unknown>
+  heroImage?: number | string | null
+  categories?: Array<number | string>
+  relatedPosts?: Array<number | string>
+  authors?: Array<number | string>
   meta?: Record<string, unknown>
   status?: 'draft' | 'published'
   publishedAt?: string | null
@@ -138,6 +160,38 @@ export const normalizePageInput = (input: SerenaPageUpsertInput) => {
   }
 }
 
+export const normalizePostInput = (input: SerenaPostUpsertInput) => {
+  if (!input || typeof input !== 'object') {
+    throw new Error('Request body must be a JSON object.')
+  }
+
+  if (!input.id && !input.slug && !input.title) {
+    throw new Error('At least one of `id`, `slug`, or `title` is required.')
+  }
+
+  const normalizedTitle = typeof input.title === 'string' ? input.title.trim() : undefined
+  const normalizedSlugSource = typeof input.slug === 'string' ? input.slug.trim() : normalizedTitle
+  const normalizedSlug = normalizedSlugSource ? toKebabCase(normalizedSlugSource) : undefined
+
+  if (!input.id && !normalizedTitle) {
+    throw new Error('`title` is required when creating a new post.')
+  }
+
+  return {
+    id: input.id,
+    title: normalizedTitle,
+    slug: normalizedSlug,
+    content: input.content,
+    heroImage: input.heroImage,
+    categories: input.categories,
+    relatedPosts: input.relatedPosts,
+    authors: input.authors,
+    meta: input.meta,
+    publishedAt: input.publishedAt,
+    _status: input.status || 'draft',
+  }
+}
+
 export const buildPagePath = (slug?: string | null) => {
   if (!slug || slug === 'home') {
     return '/'
@@ -202,3 +256,29 @@ export const buildDefaultPageHero = (title?: string) => ({
   links: [],
   media: null,
 })
+
+export const buildDefaultRichTextRoot = (text: string) => ({
+  root: {
+    type: 'root',
+    children: [
+      {
+        type: 'paragraph',
+        children: [
+          {
+            text,
+          },
+        ],
+      },
+    ],
+  },
+})
+
+export const buildDefaultPostContent = (title?: string) =>
+  buildDefaultRichTextRoot(title ? `${title} draft created by Serena.` : 'Draft created by Serena.')
+
+export const allowedGlobalSlugs = ['header', 'footer', 'settings'] as const
+
+export type SerenaGlobalSlug = (typeof allowedGlobalSlugs)[number]
+
+export const isAllowedGlobalSlug = (value: string): value is SerenaGlobalSlug =>
+  (allowedGlobalSlugs as readonly string[]).includes(value)
